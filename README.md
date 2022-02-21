@@ -18,37 +18,37 @@ on darwin_amd64
 
 ## var
 1. ### input console
-  - create folder=`var` & 3 files "*.tf"
-  ```shell
-  cd var && terraform init && terraform apply
-  ->
-  var.ec2_type
-    Enter a value: t2.micro
+    - create folder=`var` & 3 files "*.tf"
+    ```shell
+    cd var && terraform init && terraform apply
+    ->
+    var.ec2_type
+        Enter a value: t2.micro
 
-  var.instance_count
-    Enter a value: 
-  ```
+    var.instance_count
+        Enter a value: 
+    ```
 1. ### input param
-  - we can call input param in CMD like:
-  ```shell
-  terraform apply -var 'ec2_type=t2.micro'
-  ->
-  var.instance_count
-    Enter a value: 
-  ```
+    - we can call input param in CMD like:
+    ```shell
+    terraform apply -var 'ec2_type=t2.micro'
+    ->
+    var.instance_count
+        Enter a value: 
+    ```
 1. ### terraform.tfvars
-  - create `terraform.tfvars`
-  ```shell
-  terraform apply # If *.tfvars has different name from `terraform.tfvars`, we need CMD: terraform apply  -var-file="vars.tfvars"
-  -> will NOT prompt GUI input
-  terraform destroy
-  ```
+    - create `terraform.tfvars`
+    ```shell
+    terraform apply # If *.tfvars has different name from `terraform.tfvars`, we need CMD: terraform apply  -var-file="vars.tfvars"
+    -> will NOT prompt GUI input
+    terraform destroy
+    ```
 
 ## ec2
 1. ### ubuntu
-  ![ubuntu](screenshots/ubuntu.png)
+    ![ubuntu](screenshots/ubuntu.png)
 1. ### linux
-  ![linux](screenshots/linux.png)
+    ![linux](screenshots/linux.png)
 
 ## s3
 ![s3](screenshots/s3.png)
