@@ -81,6 +81,7 @@ on darwin_amd64
         ```
 1. ### AWS result
     1. #### IAM role & policy
+        > policy is according to `codebuild/main.tf > "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"`
         ![role_policy](screenshots/role_policy.png)
     1. #### S3
         ![s3_cb](screenshots/s3_cb.png)
