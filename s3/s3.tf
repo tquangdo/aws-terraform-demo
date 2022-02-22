@@ -1,3 +1,5 @@
+# Saving your tfstate file in s3
+# IMPORTANT!!! Make sure the S3 bucket exists
 # terraform {
 #   backend "s3" {
 #     bucket = "dtq-terraform"
@@ -7,10 +9,10 @@
 # }
 
 resource "aws_s3_bucket" "s3_bucket_name" { 
-    bucket = "dtq-bucket-terraform-getobj"
+    bucket = var.var_bucket_name
 }
 
-resource "aws_s3_bucket_policy" "attach_bucket_policy" {
+resource "aws_s3_bucket_policy" "default" {
     bucket = aws_s3_bucket.s3_bucket_name.id
     policy = file("policies/bucket_policy.json")
 }

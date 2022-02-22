@@ -15,7 +15,7 @@ data "aws_ami" "latest_amazon_linux" {
 #   owners = ["099720109477"]
 # }
 
-resource "aws_instance" "example" {
+resource "aws_instance" "default" {
   ami           = data.aws_ami.latest_amazon_linux.id
   # ami           = "ami-2757f631" # ubuntu
   # ami           = data.aws_ami.ubuntu.id
@@ -24,8 +24,8 @@ resource "aws_instance" "example" {
   # user_data = file("scripts/ubuntu_jenkins.sh")
   user_data = file("scripts/linux_apache.sh")
   tags = {
-    Name = "DTQEC2LInuxTerraform"
+    Name = var.var_ec2_name
   }
-  key_name = "DTQAMILinux20211223"
+  key_name = var.var_keypem_name
   security_groups = ["${aws_security_group.allow_multi.name}"] # "split/sg.tf": name = "allow_multi"
 }

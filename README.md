@@ -8,6 +8,10 @@
 ## reference
 [youtube](https://www.youtube.com/watch?v=RA1mNClGYJ4&list=PLQP5dDPLts65J8csDjrGiLH5MZgTyTsDB)
 
+## terraform help
+1. ### get
+    - Downloads and installs modules needed for the configuration given by PATH.
+
 ## install terraform
 ```shell
 terraform -version
@@ -20,7 +24,7 @@ on darwin_amd64
 1. ### input console
     - create folder=`var` & 3 files "*.tf"
     ```shell
-    cd var && terraform init && terraform apply
+    cd var && terraform init && terraform apply -auto-approve
     ->
     var.ec2_type
         Enter a value: t2.micro
@@ -52,3 +56,35 @@ on darwin_amd64
 
 ## s3
 ![s3](screenshots/s3.png)
+
+## codebuild
+1. ### terraform CLI
+    1. #### validate
+        ```shell
+        codebuild$ terraform validate
+        => Success! The configuration is valid.
+        ```
+    1. #### plan
+        ```shell
+        codebuild$ terraform plan -out tform_plan.out
+        => 
+        var.var_codebuild_projname
+            Enter a value: DTQCodeBuildProjTerraform
+            ...
+        Plan: 5 to add, 0 to change, 0 to destroy.
+        Saved the plan to: tform_plan.out
+        ```
+    1. #### apply
+        ```shell
+        codebuild$ terraform apply tform_plan.out
+        => Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+        ```
+1. ### AWS result
+    1. #### IAM role & policy
+        ![role_policy](screenshots/role_policy.png)
+    1. #### S3
+        ![s3_cb](screenshots/s3_cb.png)
+    1. #### codebuild
+        ![cb1](screenshots/cb1.png)
+        ---
+        ![cb2](screenshots/cb2.png)
