@@ -1,5 +1,5 @@
 variable "var_codestar_connection" {
-	default = "arn:aws:codestar-connections:us-east-1:<AWS_ACCID!!!>:connection/2f45b0d7-576a-4934-b21b-a942fe620473"
+	default = "arn:aws:codestar-connections:us-east-1:462123133781:connection/5f3093a2-d850-4ae4-998c-e9c09a95d456"
 }
 
 variable "var_codestar_github_repo" {
@@ -7,12 +7,14 @@ variable "var_codestar_github_repo" {
 }
 
 variable "var_codebuild_projname" {
-	# default = "DTQCodeBuildProjTerraform"
+	description = "Input AWS CodeBuild project name:"
+	default = "DTQCodeBuildProjTerraform"
 }
 
-# variable "var_codepipeline_name" {
-# 	# default = "DTQPipelineTerraform"
-# }
+variable "var_codepipeline_name" {
+	description = "Input AWS CodePipeline name:"
+	# default = "DTQPipelineTerraform"
+}
 
 # S3
 variable "var_bucket_name" {
@@ -21,13 +23,27 @@ variable "var_bucket_name" {
 
 # AWS IAM Role
 variable "var_codebuild_role_name" {
-	type        = string
-	description = "CodeBuildで使用するIAMロール名称"
 	default     = "DTQRoleForCodeBuild"
 }
 
+variable "var_pipeline_role_name" {
+	default     = "DTQRoleForPipeline"
+}
+
 variable "var_codebuild_role_policy_name" {
-	type        = string
-	description = "CodeBuildで使用するIAMロールのもつポリシー名称"
 	default     = "DTQPolicyForCodeBuild"
 }
+
+variable "var_pipeline_policy_name" {
+	default     = "DTQPolicyForPipeline"
+}
+
+# AWS Cloudwatch
+variable "var_cwatch_grp_name" {
+	default     = "dtq-cwatch-loggrp-terraform"
+}
+
+variable "var_cwatch_stream_name" {
+	default     = "dtq-cwatch-logstream-terraform"
+}
+

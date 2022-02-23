@@ -1,20 +1,69 @@
-data "aws_iam_policy" "administrator" {
-  arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
+resource "aws_iam_role" "codepipeline_role" {
+  name = var.var_pipeline_role_name
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "codepipeline.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
 }
 
-module "service_role_for_continuous_check" {
-  source = "../module/aws/iam"
-  var_role_name                     = var.var_codebuild_role_name
-  var_policy_name                   = var.var_codebuild_role_policy_name
-  var_policy                        = data.aws_iam_policy.administrator.policy
-  var_principal_service_identifiers = ["codebuild.amazonaws.com"]
+resource "aws_iam_role_policy" "codepipeline_policy" {
+  name = var.var_pipeline_policy_name
+  role = aws_iam_role.codepipeline_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect":"Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "s3:GetBucketVersioning",
+        "s3:PutObjectAcl",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.s3_bucket_name.arn}",
+        "${aws_s3_bucket.s3_bucket_name.arn}/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "codestar-connections:UseConnection"
+      ],
+      "Resource": "${var.var_codestar_connection}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_codepipeline" "default" {
-  name     = "click-fe-${var.var_environment}"
-  # role_arn = var.var_codepipeline_role_arn
+  name     = var.var_codepipeline_name
+  role_arn = aws_iam_role.codepipeline_role.arn
   artifact_store {
-    location = var.codepipeline_bucket
+    location = aws_s3_bucket.s3_bucket_name.bucket
     type     = "S3"
   }
 
@@ -26,11 +75,10 @@ resource "aws_codepipeline" "default" {
       owner    = "AWS"
       provider = "CodeStarSourceConnection"
       version  = "1"
-      output_artifacts = [
-        "SourceArtifact"
-      ]
+      # output_artifacts = ["SourceArtifact"]
+      output_artifacts = ["source_output"]
       configuration = {
-        ConnectionArn    = var.codestar_connection
+        ConnectionArn    = var.var_codestar_connection
         FullRepositoryId = var.var_codestar_github_repo
         BranchName       = "main"
       }
@@ -39,29 +87,17 @@ resource "aws_codepipeline" "default" {
 
   stage {
     name = "Build"
+
     action {
-      name      = "Build"
-      category  = "Build"
-      owner     = "AWS"
-      provider  = "CodeBuild"
-      run_order = 1
-      version   = "1"
-      input_artifacts = [
-        "SourceArtifact",
-      ]
-      output_artifacts = [
-        "BuildArtifact",
-      ]
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"] # ["SourceArtifact"]
+      output_artifacts = ["build_output"] # ["BuildArtifact"]
+      version          = "1"
+
       configuration = {
-        "EnvironmentVariables" = jsonencode(
-          [
-            {
-              name  = "CLOUDFRONT_DISTRO_ID"
-              type  = "PLAINTEXT"
-              value = aws_cloudfront_distribution.s3_distribution.id
-            },
-          ]
-        )
         "ProjectName" = aws_codebuild_project.codebuild_projname.name
       }
     }
@@ -76,11 +112,10 @@ resource "aws_codepipeline" "default" {
       provider  = "S3"
       run_order = 1
       version   = "1"
-      input_artifacts = [
-        "BuildArtifact",
-      ]
+      # input_artifacts = ["BuildArtifact"]
+      input_artifacts = ["build_output"]
       configuration = {
-        "BucketName" = var.codepipeline_bucket
+        "BucketName" = aws_s3_bucket.s3_bucket_name.bucket
         "Extract"    = "true"
       }
     }

@@ -26,7 +26,8 @@ resource "aws_codebuild_project" "codebuild_projname" {
   }
   logs_config {
     cloudwatch_logs {
-      status = "ENABLED"
+      group_name  = var.var_cwatch_grp_name
+      stream_name = var.var_cwatch_stream_name
     }
   }
   source {
