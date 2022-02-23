@@ -57,6 +57,21 @@ on darwin_amd64
 ## s3
 ![s3](screenshots/s3.png)
 
+## codebuild
+1. ### use "terraform template_file"
+    - `codebuild/main.tf`: `data "template_file" "policy" {...}`
+1. ### AWS result (after click "Start build")
+    1. #### IAM role & policy
+        ![role_policy_cb](screenshots/role_policy_cb.png)
+    1. #### codebuild
+        ![new_cb1](screenshots/new_cb1.png)
+        ---
+        ![new_cb2](screenshots/new_cb2.png)
+        ---
+        ![new_cb3](screenshots/new_cb3.png)
+    1. #### S3
+        ![new_s3_cb](screenshots/new_s3_cb.png)
+
 ## cicd
 1. ### reference
     [codepipeline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codepipeline)
