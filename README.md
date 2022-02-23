@@ -90,7 +90,9 @@ on darwin_amd64
         ![role_policy_pl](screenshots/role_policy_pl.png)
     1. #### S3
         ![s3_cb](screenshots/s3_cb.png)
-    1. #### codebuild (terraform using "module")
+    1. #### codebuild
+        > `cicd/codebuild.tf` using "module"
+
         ![cb1](screenshots/cb1.png)
         ---
         ![cb2](screenshots/cb2.png)
