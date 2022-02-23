@@ -71,6 +71,8 @@ on darwin_amd64
         ![new_cb3](screenshots/new_cb3.png)
     1. #### S3
         ![new_s3_cb](screenshots/new_s3_cb.png)
+    1. #### cloudwatch log group & stream
+        ![cwatch](screenshots/cwatch.png)
 
 ## cicd
 1. ### reference
