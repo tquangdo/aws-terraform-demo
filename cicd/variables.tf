@@ -1,5 +1,5 @@
 variable "var_codestar_connection" {
-	default = "arn:aws:codestar-connections:us-east-1:462123133781:connection/2f45b0d7-576a-4934-b21b-a942fe620473"
+	default = "arn:aws:codestar-connections:us-east-1:<AWS_ACCID!!!>:connection/2f45b0d7-576a-4934-b21b-a942fe620473"
 }
 
 variable "var_codestar_github_repo" {

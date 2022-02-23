@@ -1,3 +1,15 @@
+data "aws_iam_policy" "administrator" {
+  arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
+}
+
+module "service_role_for_continuous_check" {
+  source = "../module/aws/iam"
+  var_role_name                     = var.var_codebuild_role_name
+  var_policy_name                   = var.var_codebuild_role_policy_name
+  var_policy                        = data.aws_iam_policy.administrator.policy
+  var_principal_service_identifiers = ["codebuild.amazonaws.com"]
+}
+
 resource "aws_codepipeline" "default" {
   name     = "click-fe-${var.var_environment}"
   # role_arn = var.var_codepipeline_role_arn

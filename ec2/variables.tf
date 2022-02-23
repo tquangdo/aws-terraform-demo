@@ -3,5 +3,6 @@ variable "var_keypem_name" {
 }
 
 variable "var_ec2_name" {
+	description = "Input AWS EC2 tag name:"
 	# default = "DTQEC2LInuxTerraform"
 }
