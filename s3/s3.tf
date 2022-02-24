@@ -1,13 +1,3 @@
-# Saving your tfstate file in s3
-# IMPORTANT!!! Make sure the S3 bucket exists
-# terraform {
-#   backend "s3" {
-#     bucket = "dtq-terraform"
-#     key    = "terraform.tfstate"
-#     region = "us-east-1"
-#   }
-# }
-
 resource "aws_s3_bucket" "s3_bucket_name" { 
     bucket = var.var_bucket_name
 }

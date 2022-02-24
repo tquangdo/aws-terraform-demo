@@ -20,7 +20,7 @@ Terraform v1.1.4
 on darwin_amd64
 ```
 
-## var
+## [var] folder
 1. ### input console
     - create folder=`var` & 3 files "*.tf"
     ```shell
@@ -48,16 +48,16 @@ on darwin_amd64
     terraform destroy
     ```
 
-## ec2
+## [ec2] folder
 1. ### ubuntu
     ![ubuntu](screenshots/ubuntu.png)
 1. ### linux
     ![linux](screenshots/linux.png)
 
-## s3
+## [s3] folder
 ![s3](screenshots/s3.png)
 
-## codebuild
+## [codebuild] folder
 1. ### use "terraform template_file"
     - `codebuild/main.tf`: `data "template_file" "policy" {...}`
 1. ### AWS result (after click "Start build")
@@ -74,7 +74,7 @@ on darwin_amd64
     1. #### cloudwatch log group & stream
         ![cwatch](screenshots/cwatch.png)
 
-## cicd
+## [cicd] folder
 1. ### reference
     [codepipeline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codepipeline)
 1. ### terraform CLI
@@ -115,3 +115,35 @@ on darwin_amd64
         ![cb2](screenshots/cb2.png)
     1. #### pipeline
         ![pipeline](screenshots/pipeline.png)
+
+## [pipeline_be] folder
+![overview](screenshots/overview.png)
+1. ### reference
+    [classmethod](https://dev.classmethod.jp/articles/simple-terraform-cicd-pipeline-with-aws-codepipeline/)
+1. ### s3
+    - name=`dtq-bucket-terraform-cicd`
+1. ### dynamodb
+    - name=`DTQDynamoDBTerraformStateLock`
+1. ### codecommit
+    - name=`DTQPipelineTerraformCICD`
+    - create=`README.md`
+    - copy paste from `pipeline_be` folder (Ex: `buildspec.yml`) and `git push`
+1. ### pipeline
+    ![pline](screenshots/pline.png)
+    - => will create output for `S3:dtq-bucket-terraform-cicd`, `S3:dtq-cm-terraform-000` & `DynamoDB`
+    ![s3_be](screenshots/s3_be.png)
+    ---
+    ![s3_o1](screenshots/s3_o1.png)
+    ---
+    ![db](screenshots/db.png)
+1. ### run terraform
+    1. #### no change
+        - `terraform apply -refresh-only` => show "Apply complete! Resources: 0 added, 0 changed, 0 destroyed."
+    1. #### change
+        - create `test` folder with `s3.tf` to create bucket=`dtq-cm-terraform-009`
+        - `terraform apply -refresh-only` => show "Apply complete! Resources: 1 added, 0 changed, 0 destroyed."
+        ![s3_o2](screenshots/s3_o2.png)
+        - download `terraform.tfstate` from `S3:dtq-bucket-terraform-cicd` and compare with "no change"
+        ![s3_compare](screenshots/s3_compare.png)
+1. ### delete AWS resources
+    `pipeline_be$ ./del_aws_resource.sh`
