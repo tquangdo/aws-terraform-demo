@@ -110,14 +110,14 @@ on darwin_amd64
     1. #### codebuild
         > MODULE!
         > 1. define module name
-        > `cicd/codebuild.tf` > `module "service_role_for_continuous_check" {...}`
+            > `cicd/codebuild.tf` > `module "service_role_for_continuous_check" {...}`
         > 2. define module source
         > `cicd/codebuild.tf` > `source = "../module/aws/iam"`
-        > 2.1. output var
-        > `module/aws/iam/output.tf` > `output this_aws_iam_role_arn {...}`
+            > 2.1. output var
+            > `module/aws/iam/output.tf` > `output this_aws_iam_role_arn {...}`
         > 3. call module name
         > `cicd/codebuild.tf` > `service_role = module.service_role_for_continuous_check.this_aws_iam_role_arn` # use output "this_aws_iam_role_arn"
-        
+
         ![cb1](screenshots/cb1.png)
         ---
         ![cb2](screenshots/cb2.png)
